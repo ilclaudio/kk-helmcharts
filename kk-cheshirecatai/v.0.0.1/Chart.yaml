@@ -7,7 +7,7 @@ icon: file://../app-logo.png
 appVersion: "1.16.0"
 home: https://www.claudiobattaglino.it
 maintainers:
-- name: ioclaudio
+- name: Claudio Battaglino
 keywords:
   - application
   - ai
