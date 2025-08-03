@@ -1,0 +1,20 @@
+apiVersion: v2
+name: kk-cheshirecatai
+version: 0.0.1
+description: A Helm chart to create a Cheshire Cat AI system on Rancher.
+type: application
+icon: file://../app-logo.png
+appVersion: "1.16.0"
+home: https://www.claudiobattaglino.it
+maintainers:
+- name: ioclaudio
+keywords:
+  - application
+  - ai
+  - llm
+  - chatbot
+  - http
+  - web
+  - python
+  - cbc
+  - ict

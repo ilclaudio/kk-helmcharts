@@ -1,0 +1,132 @@
+rancher_max_version: 2.6.2
+labels:
+  io.cattle.role: cluster # options are cluster/project
+  io.rancher.app_min_version: 7.3.8
+categories:
+- AI
+- LLM
+- CMS
+questions:
+- variable: image.debug
+  default: false
+  label: Enable debug
+  description: "Enable debug"
+  type: boolean
+  group: "Container image"
+- variable: defaultImage
+  default: false
+  label: Use Default Image
+  description: "Use default Docker image"
+  type: boolean
+  show_subquestion_if: false
+  group: "Container image"
+  subquestions:
+  - variable: image.repository
+    label: "Cheshire Cat AI image repository"
+    type: string
+    required: true
+    default: "ghcr.io/cheshire-cat-ai/core"
+  - variable: image.tag
+    label: "Image tag"
+    description: "Cheshire Cat AI image tag"
+    type: string
+    required: true
+    default: "latest"
+  - variable: image.pullPolicy
+    label: "Pull policy image"
+    type: enum
+    options:
+      - Always
+      - IfNotPresent
+      - Never
+    required: true
+    default: IfNotPresent
+- variable: service.ports.http
+  label: "Porta HTTP"
+  type: int
+  required: true
+  default: 80
+  group: "Service configurations"
+- variable: service.type
+  label: "Kubernetes Service Type"
+  type: enum
+  options:
+    - ClusterIP
+    - NodePort
+    - LoadBalancer
+  required: true
+  default: ClusterIP
+  group: "Service configurations"
+- variable: ingress.hosts[0].host
+  label: "Hostname Ingress"
+  type: string
+  required: true
+  default: "cheshirecatai.cbc.it"
+  group: "Ingress configuration"
+- variable: ingress.tls[0].hosts[0]
+  label: "Hostname TLS"
+  type: string
+  required: true
+  default: "cheshirecatai.cbc.it"
+  group: "Ingress configuration"
+- variable: ingress.hosts[0].paths[0]
+  label: "Ingress root path"
+  type: string
+  required: true
+  default: /
+  group: "Ingress configuration"
+- variable: proxy.httpsMode
+  label: "Enable HTTPS Proxy Mode"
+  description: "Enable the var CCAT_HTTPS_PROXY_MODE into the pod"
+  type: boolean
+  default: true
+  required: true
+  group: "Ingress configuration"
+- variable: ingress.tls[0].secretName
+  label: "TLS Secret Name"
+  description: "TLS secret name to use for the ingress"
+  type: string
+  required: true
+  default: cheshirecatai-tls
+  group: "Ingress configuration"
+- variable: persistence.static.storageClass
+  label: "Storage class (Static)"
+  type: string
+  required: true
+  default: "rook-multiattach-retain"
+  group: "Persistence"
+- variable: persistence.static.size
+  label: "Storage size (Static)"
+  type: string
+  required: true
+  default: "4Gi"
+  group: "Persistence"
+- variable: persistence.plugins.storageClass
+  label: "Storage class (Plugins)"
+  type: string
+  required: true
+  default: "rook-multiattach-retain"
+  group: "Persistence"
+- variable: persistence.plugins.size
+  label: "Storage size (Plugins)"
+  type: string
+  required: true
+  default: "4Gi"
+  group: "Persistence"
+- variable: persistence.data.storageClass
+  label: "Storage class (Data)"
+  type: string
+  required: true
+  default: "rook-multiattach-retain"
+  group: "Persistence"
+- variable: persistence.data.size
+  label: "Storage size (Data)"
+  type: string
+  required: true
+  default: "4Gi"
+  group: "Persistence"
+- variable: secret.apiKey
+  label: "API Key"
+  type: password
+  required: true
+  group: "Security"

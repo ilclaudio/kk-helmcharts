@@ -1,0 +1,64 @@
+{{- if .Values.persistence.static.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "kk-cheshirecatai.fullname" . }}-static
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
+    volume.beta.kubernetes.io/storage-provisioner: rook-ceph.cephfs.csi.ceph.com
+    volume.kubernetes.io/storage-provisioner: rook-ceph.cephfs.csi.ceph.com
+spec:
+  accessModes:
+    - {{ .Values.persistence.static.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.static.size }}
+  storageClassName: rook-multiattach-retain
+  volumeMode: Filesystem
+---
+{{- end }}
+
+{{- if .Values.persistence.plugins.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "kk-cheshirecatai.fullname" . }}-plugins
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
+    volume.beta.kubernetes.io/storage-provisioner: rook-ceph.cephfs.csi.ceph.com
+    volume.kubernetes.io/storage-provisioner: rook-ceph.cephfs.csi.ceph.com
+spec:
+  accessModes:
+    - {{ .Values.persistence.plugins.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.plugins.size }}
+  storageClassName: rook-multiattach-retain
+  volumeMode: Filesystem
+---
+{{- end }}
+
+{{- if .Values.persistence.data.enabled }}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: {{ include "kk-cheshirecatai.fullname" . }}-data
+  namespace: {{ .Release.Namespace }}
+  annotations:
+    meta.helm.sh/release-name: {{ .Release.Name }}
+    meta.helm.sh/release-namespace: {{ .Release.Namespace }}
+    volume.beta.kubernetes.io/storage-provisioner: rook-ceph.cephfs.csi.ceph.com
+    volume.kubernetes.io/storage-provisioner: rook-ceph.cephfs.csi.ceph.com
+spec:
+  accessModes:
+    - {{ .Values.persistence.data.accessMode }}
+  resources:
+    requests:
+      storage: {{ .Values.persistence.data.size }}
+  storageClassName: rook-multiattach-retain
+  volumeMode: Filesystem
+{{- end }}

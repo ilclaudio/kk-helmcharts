@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "kk-cheshirecatai.fullname" . }}
+  labels:
+    {{- include "kk-cheshirecatai.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "kk-cheshirecatai.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: {{ include "kk-cheshirecatai.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: kk-cheshirecatai
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: CCAT_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.secret.name }}
+                  key: apiKey
+            - name: CCAT_HTTPS_PROXY_MODE
+              value: {{ .Values.proxy.httpsMode | quote }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.ports.http }}
+              protocol: TCP
+            - name: debug
+              containerPort: {{ .Values.service.ports.debug }}
+              protocol: TCP
+          volumeMounts:
+            - name: static-volume
+              mountPath: /app/cat/static
+            - name: plugins-volume
+              mountPath: /app/cat/plugins
+            - name: data-volume
+              mountPath: /app/cat/data
+      volumes:
+        - name: static-volume
+          persistentVolumeClaim:
+            claimName: {{ include "kk-cheshirecatai.fullname" . }}-static
+        - name: plugins-volume
+          persistentVolumeClaim:
+            claimName: {{ include "kk-cheshirecatai.fullname" . }}-plugins
+        - name: data-volume
+          persistentVolumeClaim:
+            claimName: {{ include "kk-cheshirecatai.fullname" . }}-data
